@@ -1,0 +1,29 @@
+{
+  "project_info": {
+    "project_number": "235132972506",
+    "project_id": "pay-pal-guide-db6e1",
+    "storage_bucket": "pay-pal-guide-db6e1.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:235132972506:android:9b854490abec9d761c24e3",
+        "android_client_info": {
+          "package_name": "com.example.pay_pal_guide"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyAhbuzkwf9PF01BEMpa8h6nIO5uOvNU-DQ"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
