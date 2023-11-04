@@ -34,5 +34,10 @@ class AllColor extends GetxController {
     const Color(0xFF0b1922),
   ];
 
+  var webviewContainerColor = [
+    const Color(0xFF6FDFE8).withOpacity(0.11),
+    const Color(0xFF3E9BE3).withOpacity(0.10),
+  ];
+
   var homeScreenPayPalColor = Colors.white;
 }

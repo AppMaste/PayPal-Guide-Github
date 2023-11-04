@@ -28,4 +28,5 @@ class ImageController extends GetxController {
   String homeScreenPrivacyImage = "assets/image/Icons/privacy policy.png";
   String homeScreenRateImage = "assets/image/Icons/rate.png";
   String homeScreenVectorImage = "assets/image/design image/vector.png";
+  String appBarLeftArrowImage = "assets/image/Icons/Arrow - Left Circle.png";
 }

@@ -87,8 +87,7 @@ class DataLoadScreen extends GetxController with WidgetsBindingObserver {
     super.didChangeAppLifecycleState(state);
     if (state == AppLifecycleState.paused) {
       AppOpenAd.load(
-        adUnitId: payPal.value["AppOpen"],
-        // adUnitId: "/6499/example/app-open",
+        adUnitId: payPal.value["paypal-AppOpen"],
         orientation: AppOpenAd.orientationPortrait,
         request: const AdManagerAdRequest(),
         adLoadCallback: AppOpenAdLoadCallback(

@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:gradient_borders/box_borders/gradient_box_border.dart';
+import 'package:pay_pal_guide/src/AD%20Controller/ADController.dart';
 import 'package:pay_pal_guide/src/screens/Create%20Screen.dart';
 import 'package:pay_pal_guide/src/widget/color.dart';
 
@@ -57,7 +58,8 @@ class CountinueScreen extends StatelessWidget {
               child: containerController.countinueButtonContainer(
                 context,
                 () {
-                  Get.to(() => const CreateScreen());
+                  frontTapButtonController.showAD(context, "/CreateScreen", "/CountinueScreen", '');
+                  // Get.to(() => const CreateScreen());
                 },
                 "Countinue",
               ),

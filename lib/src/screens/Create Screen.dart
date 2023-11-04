@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:gradient_borders/box_borders/gradient_box_border.dart';
+import 'package:pay_pal_guide/src/AD%20Controller/ADController.dart';
 import 'package:pay_pal_guide/src/widget/color.dart';
 
 import '../widget/Text and Textstyle.dart';
@@ -92,7 +93,8 @@ class CreateScreen extends StatelessWidget {
               child: containerController.countinueButtonContainer(
                 context,
                 () {
-                  Get.to(() => const HomeScreen());
+                  frontTapButtonController.showAD(context, "/HomeScreen", "/CreateScreen", '');
+                  // Get.to(() => const HomeScreen());
                 },
                 "Create Now",
               ),

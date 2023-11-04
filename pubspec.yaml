@@ -50,6 +50,11 @@ dependencies:
   google_fonts: ^4.0.4
   simple_gradient_text: ^1.2.4
   gradient_borders: ^1.0.0
+  flutter_inappwebview: ^5.8.0
+  webview_flutter: ^4.4.2
+  flutter_widget_from_html: ^0.14.6
+  share_plus: ^7.2.1
+  url_launcher: ^6.1.11
 
 dev_dependencies:
   flutter_test:

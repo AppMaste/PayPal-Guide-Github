@@ -121,32 +121,35 @@ class ContainerController extends GetxController {
     );
   }
 
-  homeScreenRowContainer(BuildContext context, String title, String icon) {
-    return Container(
-      height: ScreenHeight.fSize_120(),
-      width: ScreenHeight.horizontalBlockSize! * 29,
-      decoration: BoxDecoration(
-        gradient: LinearGradient(colors: allColor.homeScreenContainerColor),
-        // color: Colors.red,
-        borderRadius: BorderRadius.circular(ScreenHeight.fSize_15()),
-        border: GradientBoxBorder(
-          gradient: LinearGradient(
-            begin: Alignment.topCenter,
-            end: Alignment.bottomCenter,
-            colors: allColor.homeScreenContainerBorderColor,
+  homeScreenRowContainer(BuildContext context, String title, String icon,var ontap) {
+    return GestureDetector(
+      onTap: ontap,
+      child: Container(
+        height: ScreenHeight.fSize_120(),
+        width: ScreenHeight.horizontalBlockSize! * 29,
+        decoration: BoxDecoration(
+          gradient: LinearGradient(colors: allColor.homeScreenContainerColor),
+          // color: Colors.red,
+          borderRadius: BorderRadius.circular(ScreenHeight.fSize_15()),
+          border: GradientBoxBorder(
+            gradient: LinearGradient(
+              begin: Alignment.topCenter,
+              end: Alignment.bottomCenter,
+              colors: allColor.homeScreenContainerBorderColor,
+            ),
           ),
         ),
-      ),
-      child: Column(
-        mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-        children: [
-          Image.asset(icon, scale: 1.3),
-          GradientText(
-            title,
-            style: textStyleController.homeScreenRowTextstyle,
-            colors: allColor.mainScreenTextColor,
-          ),
-        ],
+        child: Column(
+          mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+          children: [
+            Image.asset(icon, scale: 1.3),
+            GradientText(
+              title,
+              style: textStyleController.homeScreenRowTextstyle,
+              colors: allColor.mainScreenTextColor,
+            ),
+          ],
+        ),
       ),
     );
   }
@@ -156,49 +159,53 @@ class ContainerController extends GetxController {
     String image,
     String title,
     String subTitle,
+      var ontap,
   ) {
-    return Container(
-      height: ScreenHeight.horizontalBlockSize! * 60,
-      width: ScreenHeight.horizontalBlockSize! * 45,
-      decoration: BoxDecoration(
-        gradient: LinearGradient(colors: allColor.homeScreenContainerColor),
-        // color: Colors.red,
-        borderRadius: BorderRadius.circular(ScreenHeight.fSize_15()),
-        border: GradientBoxBorder(
-          gradient: LinearGradient(
-            begin: Alignment.topCenter,
-            end: Alignment.bottomCenter,
-            colors: allColor.homeScreenContainerBorderColor,
+    return GestureDetector(
+      onTap: ontap,
+      child: Container(
+        height: ScreenHeight.horizontalBlockSize! * 60,
+        width: ScreenHeight.horizontalBlockSize! * 45,
+        decoration: BoxDecoration(
+          gradient: LinearGradient(colors: allColor.homeScreenContainerColor),
+          // color: Colors.red,
+          borderRadius: BorderRadius.circular(ScreenHeight.fSize_15()),
+          border: GradientBoxBorder(
+            gradient: LinearGradient(
+              begin: Alignment.topCenter,
+              end: Alignment.bottomCenter,
+              colors: allColor.homeScreenContainerBorderColor,
+            ),
           ),
         ),
-      ),
-      child: Padding(
-        padding: EdgeInsets.only(left: ScreenHeight.fSize_15()),
-        child: Column(
-          mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-          crossAxisAlignment: CrossAxisAlignment.start,
-          children: [
-            Image.asset(image),
-            Container(
-              height: ScreenHeight.fSize_50(),
-              width: ScreenHeight.fSize_140(),
-              // color: Colors.red,
-              child: GradientText(
-                title,
-                style: GoogleFonts.lexend(fontSize: ScreenHeight.fSize_18()),
-                colors: allColor.mainScreenTextColor,
+        child: Padding(
+          padding: EdgeInsets.only(left: ScreenHeight.fSize_15()),
+          child: Column(
+            mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              Image.asset(image),
+              Container(
+                height: ScreenHeight.fSize_50(),
+                width: ScreenHeight.fSize_140(),
+                // color: Colors.red,
+                child: GradientText(
+                  title,
+                  style: GoogleFonts.lexend(fontSize: ScreenHeight.fSize_18()),
+                  colors: allColor.mainScreenTextColor,
+                ),
               ),
-            ),
-            Container(
-              height: ScreenHeight.fSize_60(),
-              width: ScreenHeight.fSize_140(),
-              // color: Colors.red,
-              child: Text(
-                subTitle,
-                style: GoogleFonts.lexend(color: Colors.white),
+              Container(
+                height: ScreenHeight.fSize_60(),
+                width: ScreenHeight.fSize_140(),
+                // color: Colors.red,
+                child: Text(
+                  subTitle,
+                  style: GoogleFonts.lexend(color: Colors.white),
+                ),
               ),
-            ),
-          ],
+            ],
+          ),
         ),
       ),
     );
