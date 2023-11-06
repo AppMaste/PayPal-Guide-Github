@@ -176,6 +176,8 @@ class HomeScreen extends StatelessWidget {
                       },
                     ),
                     SizedBox(height: ScreenHeight.fSize_20()),
+                    payPalNativeController.NATIVE("listTile", "/HomeScreen"),
+                    SizedBox(height: ScreenHeight.fSize_20()),
                     Padding(
                       padding:
                           EdgeInsets.symmetric(horizontal: ScreenHeight.fSize_15()),
@@ -292,6 +294,8 @@ class HomeScreen extends StatelessWidget {
                       "Rate US",
                       textController.homeScreenRateText,
                     ),
+                    SizedBox(height: ScreenHeight.fSize_60()),
+                    payPalNativeController.NATIVE("listTileMedium", "/HomeScreen"),
                     SizedBox(height: ScreenHeight.fSize_60()),
                   ],
                 ),

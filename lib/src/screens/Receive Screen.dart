@@ -2,7 +2,8 @@ import 'package:flutter/material.dart';
 import 'package:flutter_widget_from_html/flutter_widget_from_html.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:gradient_borders/box_borders/gradient_box_border.dart';
-import '../Banner And Native Controller/Banner And Native.dart';
+import '../AD Controller/ADController.dart';
+
 import '../utilities/Pay, Send and Recive Details.dart';
 import '../widget/color.dart';
 import '../widget/image.dart';

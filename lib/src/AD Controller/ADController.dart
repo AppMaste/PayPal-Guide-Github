@@ -1,7 +1,8 @@
-// ignore_for_file: invalid_use_of_protected_member
+// ignore_for_file: invalid_use_of_protected_member, non_constant_identifier_names
 
 import 'package:facebook_audience_network/ad/ad_banner.dart';
 import 'package:facebook_audience_network/ad/ad_interstitial.dart';
+import 'package:facebook_audience_network/ad/ad_native.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:google_mobile_ads/google_mobile_ads.dart';
@@ -11,6 +12,7 @@ import '../widget/size.dart';
 
 PayPalBanner payPalBannerController = Get.put(PayPalBanner());
 FrontTapButton frontTapButtonController = Get.put(FrontTapButton());
+PayPalNative payPalNativeController = Get.put(PayPalNative());
 
 class FrontTapButton extends GetxController {
   Future<void> _launchURL(String url) async {
@@ -25,7 +27,8 @@ class FrontTapButton extends GetxController {
 
   Rx Count = 1.obs;
 
-  showAD(BuildContext context, String nextPageName, String currentPageName, var arg) async {
+  showAD(BuildContext context, String nextPageName, String currentPageName,
+      var arg) async {
     // clickCount.value++;
     // ignore: unrelated_type_equality_checks
     if (payPal.value["paypal-Count"] == Count.value) {
@@ -55,7 +58,8 @@ class FrontTapButton extends GetxController {
           );
         },
       );
-      if (payPal.value[currentPageName]["paypal-Interstitial-type"] == 'admob') {
+      if (payPal.value[currentPageName]["paypal-Interstitial-type"] ==
+          'admob') {
         InterstitialAd.load(
           adUnitId: payPal.value[currentPageName]["paypal-Interstitial_Admob"],
           // adUnitId: "/6499/example/interstitial",
@@ -63,21 +67,28 @@ class FrontTapButton extends GetxController {
           adLoadCallback: InterstitialAdLoadCallback(onAdLoaded: (ad) {
             ad.show();
             Navigator.pop(context);
-            nextPageName != 'stop' ? Get.toNamed(nextPageName, arguments: arg) : null;
+            nextPageName != 'stop'
+                ? Get.toNamed(nextPageName, arguments: arg)
+                : null;
             Count.value = 1;
           }, onAdFailedToLoad: (error) {
             InterstitialAd.load(
-              adUnitId: payPal.value[currentPageName]["paypal-Interstitial_Admob"],
+              adUnitId: payPal.value[currentPageName]
+                  ["paypal-Interstitial_Admob"],
               // adUnitId: "/6499/example/interstitial",
               request: const AdManagerAdRequest(),
               adLoadCallback: InterstitialAdLoadCallback(onAdLoaded: (ad) {
                 ad.show();
                 Navigator.pop(context);
-                nextPageName != 'stop' ? Get.toNamed(nextPageName, arguments: arg) : null;
+                nextPageName != 'stop'
+                    ? Get.toNamed(nextPageName, arguments: arg)
+                    : null;
                 Count.value = 1;
               }, onAdFailedToLoad: (error) {
                 Navigator.pop(context);
-                nextPageName != 'stop' ? Get.offNamed(nextPageName, arguments: arg) : null;
+                nextPageName != 'stop'
+                    ? Get.offNamed(nextPageName, arguments: arg)
+                    : null;
                 Count.value = 1;
               }),
             );
@@ -92,12 +103,16 @@ class FrontTapButton extends GetxController {
             if (result == InterstitialAdResult.LOADED) {
               FacebookInterstitialAd.showInterstitialAd();
               Navigator.pop(context);
-              nextPageName != 'stop' ? Get.toNamed(nextPageName, arguments: arg) : null;
+              nextPageName != 'stop'
+                  ? Get.toNamed(nextPageName, arguments: arg)
+                  : null;
               Count.value = 1;
             }
             if (result == InterstitialAdResult.ERROR) {
               Navigator.pop(context);
-              nextPageName != 'stop' ? Get.toNamed(nextPageName, arguments: arg) : null;
+              nextPageName != 'stop'
+                  ? Get.toNamed(nextPageName, arguments: arg)
+                  : null;
               Count.value = 1;
             }
           },
@@ -109,7 +124,9 @@ class FrontTapButton extends GetxController {
           const Duration(seconds: 2),
           () {
             Navigator.pop(context);
-            nextPageName != 'stop' ? Get.toNamed(nextPageName, arguments: arg) : null;
+            nextPageName != 'stop'
+                ? Get.toNamed(nextPageName, arguments: arg)
+                : null;
             Count.value = 1;
           },
         );
@@ -129,7 +146,7 @@ class PayPalBanner extends GetxController {
   // var bannerLoaded = false.obs;
 
   BANNER(String pageName) {
-    if (payPal.value[Get.currentRoute]["paypal-Banner_type"] == "admob") {
+    if (payPal.value[pageName]["paypal-Banner_type"] == "admob") {
       bannerAd = BannerAd(
         size: AdSize.fluid,
         adUnitId: payPal.value[pageName]["paypal-Banner"],
@@ -169,5 +186,199 @@ class PayPalBanner extends GetxController {
                   }),
             ),
           );
+  }
+}
+
+class PayPalNative extends GetxController {
+  Future<void> _launchURL(String url) async {
+    late Uri uri = Uri(scheme: "https", host: url);
+    if (!await launchUrl(
+      uri,
+      mode: LaunchMode.externalApplication,
+    )) {
+      throw "Can not launch url";
+    }
+  }
+
+  NATIVE(String factoryId, String page) {
+    NativeAd? nativeAd;
+    var isLoaded = false.obs;
+    if (payPal.value[page]["paypal-Native_type"] == "admob") {
+      nativeAd = NativeAd(
+        request: const AdManagerAdRequest(),
+        adUnitId: payPal.value[page]["paypal-Native"],
+        // adUnitId: "/6499/example/native",
+        listener: NativeAdListener(onAdLoaded: (ad) {
+          nativeAd!.load();
+          isLoaded.value = true;
+          // print("Native ad Loaded");
+        }, onAdFailedToLoad: (ad, error) {
+          // print("Native ad Failed to Load");
+        }),
+        // factoryId: wantSmallNativeAd ? "listTile" : "listTileMedium",
+        factoryId: factoryId,
+      );
+      nativeAd.load();
+    }
+    return payPal.value[page]["paypal-Native_type"] == "admob"
+        ? Obx(() => (isLoaded.value)
+            ? factoryId == "listTile"
+                ? Stack(
+                    children: [
+                      Container(
+                        height: ScreenHeight.fSize_160(),
+                        width: ScreenHeight.fSize_350(),
+                        // color: Colors.green,
+                        decoration: BoxDecoration(
+                          color: Colors.white,
+                          borderRadius: BorderRadius.circular(10),
+                          boxShadow: const [
+                            BoxShadow(
+                              offset: Offset(1, 1),
+                              color: Colors.black26,
+                              blurRadius: 5,
+                            )
+                          ],
+                        ),
+                        child: AdWidget(
+                          ad: nativeAd!,
+                        ),
+                        // color: Colors.blue,
+                      ),
+                    ],
+                  )
+                : Stack(
+                    children: [
+                      Container(
+                        height: ScreenHeight.fSize_250(),
+                        width: ScreenHeight.fSize_350(),
+                        // color: Colors.green,
+                        decoration: BoxDecoration(
+                          color: Colors.white,
+                          borderRadius: BorderRadius.circular(10),
+                          boxShadow: const [
+                            BoxShadow(
+                              offset: Offset(1, 1),
+                              color: Colors.black26,
+                              blurRadius: 5,
+                            )
+                          ],
+                        ),
+                        child: AdWidget(
+                          ad: nativeAd!,
+                        ),
+                        // color: Colors.blue,
+                      ),
+                    ],
+                  )
+            : factoryId == "listTile"
+                ? Container(
+                    height: ScreenHeight.horizontalBlockSize! * 50,
+                    width: ScreenHeight.fSize_350(),
+                    decoration: BoxDecoration(
+                      color: Colors.white,
+                      borderRadius: BorderRadius.circular(10),
+                      boxShadow: const [
+                        BoxShadow(
+                          offset: Offset(1, 1),
+                          color: Colors.black26,
+                          blurRadius: 5,
+                        )
+                      ],
+                    ),
+                    child: const Center(
+                      child: CircularProgressIndicator(),
+                    ),
+                  )
+                : Container(
+                    height: ScreenHeight.fSize_250(),
+                    width: ScreenHeight.fSize_350(),
+                    decoration: BoxDecoration(
+                      color: Colors.white,
+                      borderRadius: BorderRadius.circular(10),
+                      boxShadow: const [
+                        BoxShadow(
+                          offset: Offset(1, 1),
+                          color: Colors.black26,
+                          blurRadius: 5,
+                        )
+                      ],
+                    ),
+                    child: const Center(
+                      child: CircularProgressIndicator(),
+                    ),
+                  ))
+        : payPal.value[page]["paypal-Native_type"] == "fb"
+            ? Container(
+                height: factoryId == "listTile"
+                    ? ScreenHeight.fSize_150()
+                    : ScreenHeight.fSize_250(),
+                width: ScreenHeight.fSize_350(),
+                decoration: const BoxDecoration(
+                  color: Colors.white,
+                  boxShadow: [
+                    BoxShadow(
+                      color: Colors.black26,
+                      blurRadius: 25.0,
+                    )
+                  ],
+                ),
+                child: FacebookNativeAd(
+                  placementId: payPal.value["paypal-Native-FB"],
+                  adType: NativeAdType.NATIVE_AD,
+                  height: factoryId == "listTileMedium"
+                      ? ScreenHeight.fSize_150()
+                      : ScreenHeight.fSize_250(),
+                  width: ScreenHeight.fSize_350(),
+                  backgroundColor: Colors.white,
+                  titleColor: Colors.black,
+                  descriptionColor: Colors.grey,
+                  buttonTitleColor: Colors.white,
+                  buttonColor: const Color(0xFF112631),
+                  buttonBorderColor: const Color(0xFF71E2E8),
+                  listener: (result, value) {},
+                ),
+              )
+            : payPal.value[page]["paypal-Native_type"] == "null"
+                ? Container()
+                : GestureDetector(
+                    onTap: () {
+                      _launchURL(payPal.value[page]["paypal-Url"]);
+                    },
+                    child: Stack(
+                      children: [
+                        Container(
+                          height: factoryId == "listTile"
+                              ? ScreenHeight.fSize_150()
+                              : ScreenHeight.fSize_250(),
+                          width: ScreenHeight.fSize_350(),
+                          decoration: BoxDecoration(
+                              borderRadius:
+                                  const BorderRadius.all(Radius.circular(10)),
+                              image: DecorationImage(
+                                  fit: BoxFit.cover,
+                                  image: NetworkImage(payPal.value[page]
+                                      ["paypal-Image-Url"]))),
+                        ),
+                        Positioned(
+                          child: Container(
+                            decoration: BoxDecoration(
+                                color: Colors.amber,
+                                borderRadius: BorderRadius.all(
+                                    Radius.circular(ScreenHeight.fSize_2()))),
+                            height: ScreenHeight.fSize_16(),
+                            width: ScreenHeight.fSize_34(),
+                            child: Center(
+                                child: Text(
+                              "Ad",
+                              style: TextStyle(
+                                  color: Colors.white,
+                                  fontSize: ScreenHeight.fSize_10()),
+                            )),
+                          ),
+                        ),
+                      ],
+                    ),
+                  );
   }
 }

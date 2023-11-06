@@ -3,8 +3,7 @@ import 'package:flutter_inappwebview/flutter_inappwebview.dart';
 import 'package:get/get.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:gradient_borders/box_borders/gradient_box_border.dart';
-import 'package:pay_pal_guide/src/Banner%20And%20Native%20Controller/Banner%20And%20Native.dart';
-
+import '../AD Controller/ADController.dart';
 import '../utilities/PayPal Info Data.dart';
 import '../utilities/country list.dart';
 import '../widget/color.dart';

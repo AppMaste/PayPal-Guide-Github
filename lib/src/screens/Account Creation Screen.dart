@@ -2,10 +2,10 @@ import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:gradient_borders/box_borders/gradient_box_border.dart';
-import 'package:pay_pal_guide/src/Banner%20And%20Native%20Controller/Banner%20And%20Native.dart';
 import 'package:pay_pal_guide/src/widget/image.dart';
 import 'package:pay_pal_guide/src/widget/size.dart';
 
+import '../AD Controller/ADController.dart';
 import '../widget/color.dart';
 import '../utilities/country list.dart';
 import '../utilities/country list.dart';
@@ -40,7 +40,7 @@ class AccountCreationScreen extends StatelessWidget {
         child: Stack(
           children: [
             Padding(
-              padding:  EdgeInsets.only(bottom: ScreenHeight.fSize_50()),
+              padding: EdgeInsets.only(bottom: ScreenHeight.fSize_50()),
               child: ListView.builder(
                 itemCount: countryListController.Country.length,
                 itemBuilder: (context, index) {
@@ -49,13 +49,14 @@ class AccountCreationScreen extends StatelessWidget {
                     child: GestureDetector(
                       onTap: () {
                         Get.to(() => const AccountCreationDataViewScreen(),
-                            arguments: countryListController.CountryDataLink[index]);
+                            arguments:
+                            countryListController.CountryDataLink[index]);
                       },
                       child: Container(
                         height: ScreenHeight.fSize_70(),
                         decoration: BoxDecoration(
                           borderRadius:
-                              BorderRadius.circular(ScreenHeight.fSize_15()),
+                          BorderRadius.circular(ScreenHeight.fSize_15()),
                           gradient: LinearGradient(
                               colors: allColor.homeScreenContainerColor),
                           border: GradientBoxBorder(
@@ -65,7 +66,8 @@ class AccountCreationScreen extends StatelessWidget {
                           ),
                         ),
                         child: Padding(
-                          padding:  EdgeInsets.only(right: ScreenHeight.fSize_10()),
+                          padding:
+                          EdgeInsets.only(right: ScreenHeight.fSize_10()),
                           child: Row(
                             mainAxisAlignment: MainAxisAlignment.spaceBetween,
                             children: [
@@ -73,9 +75,10 @@ class AccountCreationScreen extends StatelessWidget {
                                 width: ScreenHeight.fSize_80(),
                                 decoration: BoxDecoration(
                                     borderRadius: BorderRadius.only(
-                                      topLeft: Radius.circular(ScreenHeight.fSize_15()),
-                                      bottomLeft:
-                                          Radius.circular(ScreenHeight.fSize_15()),
+                                      topLeft: Radius.circular(
+                                          ScreenHeight.fSize_15()),
+                                      bottomLeft: Radius.circular(
+                                          ScreenHeight.fSize_15()),
                                     ),
                                     gradient: LinearGradient(
                                       colors: allColor.listContainerColor,
@@ -91,9 +94,11 @@ class AccountCreationScreen extends StatelessWidget {
                                               ScreenHeight.fSize_10())),
                                       child: Center(
                                         child: Text(
-                                          countryListController.Country[index][0],
+                                          countryListController.Country[index]
+                                          [0],
                                           style: GoogleFonts.lexend(
-                                            color: allColor.homeScreenPayPalColor,
+                                            color:
+                                            allColor.homeScreenPayPalColor,
                                             fontSize: ScreenHeight.fSize_20(),
                                           ),
                                         ),

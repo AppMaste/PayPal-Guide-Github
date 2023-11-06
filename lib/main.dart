@@ -75,7 +75,7 @@ AndroidNotificationChannel channel = const AndroidNotificationChannel(
     playSound: true, importance: Importance.high);
 
 final FlutterLocalNotificationsPlugin flutterLocalNotificationsPlugin =
-    FlutterLocalNotificationsPlugin();
+FlutterLocalNotificationsPlugin();
 
 Future<void> firebaseMessagingBackgroundHandler(RemoteMessage message) async {
   await Firebase.initializeApp();
@@ -90,7 +90,7 @@ Future<void> main() async {
   FirebaseMessaging.onBackgroundMessage(firebaseMessagingBackgroundHandler);
   await flutterLocalNotificationsPlugin
       .resolvePlatformSpecificImplementation<
-          AndroidFlutterLocalNotificationsPlugin>()
+      AndroidFlutterLocalNotificationsPlugin>()
       ?.createNotificationChannel(channel);
   await FirebaseMessaging.instance.setForegroundNotificationPresentationOptions(
     alert: true,
@@ -120,7 +120,7 @@ Future<void> main() async {
         '/BusinessAccountScreen': (context) => const BusinessAccountScreen(),
         '/PrivacyScreen': (context) => PrivacyScreen(),
         '/AccountCreationDataViewScreen': (context) =>
-            const AccountCreationDataViewScreen(),
+        const AccountCreationDataViewScreen(),
         '/PayPalInfoDetailsScreen': (context) => PayPalInfoDetailsScreen(),
         '/AccountWithCardScreen': (context) => const AccountWithCardScreen(),
         '/PPInYourLanguageScreen': (context) => const PPInYourLanguageScreen(),
