@@ -1,5 +1,7 @@
 // ignore_for_file: invalid_use_of_protected_member, non_constant_identifier_names
 
+import 'dart:async';
+
 import 'package:facebook_audience_network/ad/ad_banner.dart';
 import 'package:facebook_audience_network/ad/ad_interstitial.dart';
 import 'package:facebook_audience_network/ad/ad_native.dart';
@@ -12,7 +14,9 @@ import '../widget/size.dart';
 
 PayPalBanner payPalBannerController = Get.put(PayPalBanner());
 FrontTapButton frontTapButtonController = Get.put(FrontTapButton());
+BackTapButton backTapButtonController = Get.put(BackTapButton());
 PayPalNative payPalNativeController = Get.put(PayPalNative());
+ListNativeAd listNativeAdController = Get.put(ListNativeAd());
 
 class FrontTapButton extends GetxController {
   Future<void> _launchURL(String url) async {
@@ -134,6 +138,138 @@ class FrontTapButton extends GetxController {
     } else {
       // Get.to(() => const FirstPage());
       nextPageName != 'stop' ? Get.toNamed(nextPageName, arguments: arg) : null;
+      Count.value++;
+      // controller.incrementClickCount(context, 'FirstPage');
+    }
+  }
+}
+
+class BackTapButton extends GetxController {
+  Future<void> _launchURL(String url) async {
+    late Uri uri = Uri(scheme: "https", host: url);
+    if (!await launchUrl(
+      uri,
+      mode: LaunchMode.externalApplication,
+    )) {
+      throw "Can not launch url";
+    }
+  }
+
+  Rx Count = 1.obs;
+
+  showAD(BuildContext context, String currentPageName,) async {
+    // clickCount.value++;
+    // ignore: unrelated_type_equality_checks
+    if (payPal.value["paypal-Count"] == Count.value) {
+      showDialog(
+        barrierDismissible: false,
+        context: context,
+        builder: (BuildContext context) {
+          return WillPopScope(
+            onWillPop: () {
+              return Future.value(false);
+            },
+            child: Center(
+              child: AlertDialog(
+                title: Row(
+                  crossAxisAlignment: CrossAxisAlignment.center,
+                  mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                  children: [
+                    SizedBox(
+                        width: ScreenHeight.fSize_30(),
+                        height: ScreenHeight.fSize_30(),
+                        child: const CircularProgressIndicator()),
+                    const Text("Ad is loading..."),
+                  ],
+                ),
+              ),
+            ),
+          );
+        },
+      );
+      if (payPal.value[currentPageName]["paypal-Interstitial-type"] ==
+          'admob') {
+        InterstitialAd.load(
+          adUnitId: payPal.value[currentPageName]["paypal-Interstitial_Admob"],
+          // adUnitId: "/6499/example/interstitial",
+          request: const AdManagerAdRequest(),
+          adLoadCallback: InterstitialAdLoadCallback(onAdLoaded: (ad) {
+            ad.show();
+            Navigator.pop(context);
+            Navigator.pop(context);
+            // nextPageName != 'stop'
+            //     ? Get.toNamed(nextPageName, arguments: arg)
+            //     : null;
+            Count.value = 1;
+          }, onAdFailedToLoad: (error) {
+            InterstitialAd.load(
+              adUnitId: payPal.value[currentPageName]
+              ["paypal-Interstitial_Admob"],
+              // adUnitId: "/6499/example/interstitial",
+              request: const AdManagerAdRequest(),
+              adLoadCallback: InterstitialAdLoadCallback(onAdLoaded: (ad) {
+                ad.show();
+                Navigator.pop(context);
+                Navigator.pop(context);
+                // nextPageName != 'stop'
+                //     ? Get.toNamed(nextPageName, arguments: arg)
+                //     : null;
+                Count.value = 1;
+              }, onAdFailedToLoad: (error) {
+                Navigator.pop(context);
+                Navigator.pop(context);
+                // nextPageName != 'stop'
+                //     ? Get.offNamed(nextPageName, arguments: arg)
+                //     : null;
+                Count.value = 1;
+              }),
+            );
+          }),
+        );
+      }
+
+      if (payPal.value[currentPageName]["paypal-Interstitial-type"] == 'fb') {
+        FacebookInterstitialAd.loadInterstitialAd(
+          placementId: payPal.value["paypal-Interstitial_FB"],
+          listener: (result, value) {
+            if (result == InterstitialAdResult.LOADED) {
+              FacebookInterstitialAd.showInterstitialAd();
+              Navigator.pop(context);
+              Navigator.pop(context);
+              // nextPageName != 'stop'
+              //     ? Get.toNamed(nextPageName, arguments: arg)
+              //     : null;
+              Count.value = 1;
+            }
+            if (result == InterstitialAdResult.ERROR) {
+              Navigator.pop(context);
+              Navigator.pop(context);
+              // nextPageName != 'stop'
+              //     ? Get.toNamed(nextPageName, arguments: arg)
+              //     : null;
+              Count.value = 1;
+            }
+          },
+        );
+      }
+      if (payPal.value[currentPageName]["paypal-Interstitial-type"] == "url") {
+        _launchURL(payPal.value[currentPageName]["paypal-Url"]);
+        Future.delayed(
+          const Duration(seconds: 2),
+              () {
+            Navigator.pop(context);
+            Navigator.pop(context);
+            // nextPageName != 'stop'
+            //     ? Get.toNamed(nextPageName, arguments: arg)
+            //     : null;
+            Count.value = 1;
+          },
+        );
+      }
+    } else {
+      // Get.to(() => const FirstPage());
+      Navigator.pop(context);
+      // nextPageName != 'stop' ? Get.toNamed(nextPageName, arguments: arg) : null;
       Count.value++;
       // controller.incrementClickCount(context, 'FirstPage');
     }
@@ -382,3 +518,23 @@ class PayPalNative extends GetxController {
                   );
   }
 }
+
+class ListNativeAd extends GetxController {
+  Future<dynamic> LISTNATIVE(String pageName, String factoryID) {
+    NativeAd? ads;
+    final completer = Completer();
+    ads = NativeAd(
+      adUnitId: payPal.value[pageName]["paypal-Native"],
+      factoryId: factoryID,
+      request: const AdManagerAdRequest(),
+      listener: NativeAdListener(
+          onAdLoaded: (ad) {
+            completer.complete(ads);
+          },
+          onAdFailedToLoad: (ad, error) {}),
+    )..load();
+    // return Future.delayed(Duration(seconds: 2));
+    return completer.future;
+  }
+}
+

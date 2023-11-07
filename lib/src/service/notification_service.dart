@@ -1,5 +1,7 @@
 // ignore_for_file: invalid_use_of_protected_member, deprecated_member_use
 
+import 'package:firebase_core/firebase_core.dart';
+import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_local_notifications/flutter_local_notifications.dart';
 import 'package:timezone/timezone.dart' as tz;
@@ -25,19 +27,19 @@ class NotificationService {
         AndroidInitializationSettings('@mipmap/ic_launcher');
 
     // ios initialization
-    //  IOSInitializationSettings initializationSettingsIOS =
-    //     IOSInitializationSettings(
-    //   requestAlertPermission: false,
-    //   requestBadgePermission: false,
-    //   requestSoundPermission: false,
-    // );
+    const IOSInitializationSettings initializationSettingsIOS =
+        IOSInitializationSettings(
+      requestAlertPermission: false,
+      requestBadgePermission: false,
+      requestSoundPermission: false,
+    );
 
-    // const InitializationSettings initializationSettings =
-    //     InitializationSettings(
-    //         android: initializationSettingsAndroid,
-    //         iOS: initializationSettingsIOS);
+    const InitializationSettings initializationSettings =
+        InitializationSettings(
+            android: initializationSettingsAndroid,
+            iOS: initializationSettingsIOS);
     // the initialization settings are initialized after they are setted
-    // await flutterLocalNotificationsPlugin.initialize(initializationSettings);
+    await flutterLocalNotificationsPlugin.initialize(initializationSettings);
   }
 
   Future showNotification(int id, String title, String body) async {
@@ -46,14 +48,13 @@ class NotificationService {
       title,
       body,
       tz.TZDateTime.now(tz.local).add(
-        Duration(hours: payPal.value['paypal-messageTime']),
-      ), //schedule the notification to show after 2 seconds.
+         Duration(hours: payPal.value["paypal-messageTime"]),
+      ),
       const NotificationDetails(
         // Android details
-        android: AndroidNotificationDetails('main_channel', 'Main Channel',
-            // "main channel",
-            importance: Importance.max,
-            priority: Priority.max),
+        android: AndroidNotificationDetails(
+            'main_channel', 'Main Channel', "main channel",
+            importance: Importance.max, priority: Priority.max),
         // iOS details
       ),
 
@@ -65,3 +66,13 @@ class NotificationService {
     );
   }
 }
+AndroidNotificationChannel channel = const AndroidNotificationChannel(
+    "Hello!!", "Resume Builder", "What are you doing!!!!!!!!!!",
+    importance: Importance.high, playSound: true);
+Future<void> firebasemessgingBackgroundMessagingHandler(
+    RemoteMessage message) async {
+  await Firebase.initializeApp();
+  print("A bg message just showed up : ${message.messageId}");
+}
+
+

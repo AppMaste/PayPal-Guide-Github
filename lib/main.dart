@@ -14,6 +14,7 @@ import 'package:pay_pal_guide/src/screens/Business%20Account%20Screen.dart';
 import 'package:pay_pal_guide/src/screens/Countinue%20Screen.dart';
 import 'package:pay_pal_guide/src/screens/Create%20Screen.dart';
 import 'package:pay_pal_guide/src/screens/Data%20Load/AccountCreationDataViewScreen.dart';
+import 'package:pay_pal_guide/src/screens/Data%20Load/DataLoad%20Screen.dart';
 import 'package:pay_pal_guide/src/screens/Details%20Screen.dart';
 import 'package:pay_pal_guide/src/screens/HomeScreen.dart';
 import 'package:pay_pal_guide/src/screens/Main%20Screen.dart';
@@ -24,6 +25,7 @@ import 'package:pay_pal_guide/src/screens/Personal%20Account%20Screen.dart';
 import 'package:pay_pal_guide/src/screens/Privacy%20Screen.dart';
 import 'package:pay_pal_guide/src/screens/Receive%20Screen.dart';
 import 'package:pay_pal_guide/src/screens/Send%20Screen.dart';
+import 'package:pay_pal_guide/src/service/notification_service.dart';
 import 'package:timezone/data/latest.dart' as tz;
 
 final FirebaseRemoteConfig remoteConfig = FirebaseRemoteConfig.instance;
@@ -35,7 +37,10 @@ Future initConfig() async {
     minimumFetchInterval: const Duration(seconds: 10),
   ));
   await remoteConfig.fetchAndActivate();
+  // Data();
+  screenController.Data();
 }
+
 
 AppOpenAd? appOpenAd;
 
@@ -70,37 +75,30 @@ loadAd() {
   );
 }
 
-AndroidNotificationChannel channel = const AndroidNotificationChannel(
-    "Hello ", "Pay Pal Guide",
-    playSound: true, importance: Importance.high);
-
 final FlutterLocalNotificationsPlugin flutterLocalNotificationsPlugin =
-FlutterLocalNotificationsPlugin();
-
-Future<void> firebaseMessagingBackgroundHandler(RemoteMessage message) async {
-  await Firebase.initializeApp();
-}
+    FlutterLocalNotificationsPlugin();
 
 Future<void> main() async {
   WidgetsFlutterBinding.ensureInitialized();
-  // NotificationService().initNotification();
   tz.initializeTimeZones();
+  NotificationService().initNotification();
   MobileAds.instance.initialize();
   await Firebase.initializeApp();
-  FirebaseMessaging.onBackgroundMessage(firebaseMessagingBackgroundHandler);
+  FirebaseMessaging.onBackgroundMessage(
+          (message) => firebasemessgingBackgroundMessagingHandler(message));
+  // FirebaseMessaging.onBackgroundMessage(firebaseMessagingBackgroundHandler);
   await flutterLocalNotificationsPlugin
       .resolvePlatformSpecificImplementation<
-      AndroidFlutterLocalNotificationsPlugin>()
+          AndroidFlutterLocalNotificationsPlugin>()
       ?.createNotificationChannel(channel);
   await FirebaseMessaging.instance.setForegroundNotificationPresentationOptions(
     alert: true,
     badge: true,
     sound: true,
   );
-
   initConfig().whenComplete(() {
     payPal.value = json.decode(remoteConfig.getString('paypal'));
-    // loadAd();
+    loadAd();
   });
 
   return runApp(
@@ -120,7 +118,7 @@ Future<void> main() async {
         '/BusinessAccountScreen': (context) => const BusinessAccountScreen(),
         '/PrivacyScreen': (context) => PrivacyScreen(),
         '/AccountCreationDataViewScreen': (context) =>
-        const AccountCreationDataViewScreen(),
+            const AccountCreationDataViewScreen(),
         '/PayPalInfoDetailsScreen': (context) => PayPalInfoDetailsScreen(),
         '/AccountWithCardScreen': (context) => const AccountWithCardScreen(),
         '/PPInYourLanguageScreen': (context) => const PPInYourLanguageScreen(),
