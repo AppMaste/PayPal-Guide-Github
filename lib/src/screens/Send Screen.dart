@@ -15,54 +15,60 @@ class SendScreen extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      backgroundColor: Colors.black,
-      appBar: AppBar(
-        elevation: 0,
+    return WillPopScope(
+      onWillPop: () {
+        backTapButtonController.showAD(context, "/SendScreen");
+        return Future(() => false);
+      },
+      child: Scaffold(
         backgroundColor: Colors.black,
-        leading: Image.asset(imageController.appBarLeftArrowImage, scale: 2.4),
-        title: Text("Send Money", style: GoogleFonts.lexend()),
-      ),
-      body: Stack(
-        children: [
-          Padding(
-            padding: EdgeInsets.only(
-                left: ScreenHeight.fSize_10(),
-                right: ScreenHeight.fSize_10(),
-                top: ScreenHeight.fSize_10(),
-                bottom: ScreenHeight.fSize_55()),
-            child: Container(
-              width: double.maxFinite,
-              height: double.maxFinite,
-              decoration: BoxDecoration(
-                  gradient: LinearGradient(
-                    begin: Alignment.topCenter,
-                    end: Alignment.bottomCenter,
-                    colors: allColor.allScreenBackgroundBoxColor,
-                  ),
-                  border: GradientBoxBorder(
+        appBar: AppBar(
+          elevation: 0,
+          backgroundColor: Colors.black,
+          leading: Image.asset(imageController.appBarLeftArrowImage, scale: 2.4),
+          title: Text("Send Money", style: GoogleFonts.lexend()),
+        ),
+        body: Stack(
+          children: [
+            Padding(
+              padding: EdgeInsets.only(
+                  left: ScreenHeight.fSize_10(),
+                  right: ScreenHeight.fSize_10(),
+                  top: ScreenHeight.fSize_10(),
+                  bottom: ScreenHeight.fSize_55()),
+              child: Container(
+                width: double.maxFinite,
+                height: double.maxFinite,
+                decoration: BoxDecoration(
                     gradient: LinearGradient(
                       begin: Alignment.topCenter,
                       end: Alignment.bottomCenter,
-                      colors: allColor.homeScreenContainerBorderColor,
+                      colors: allColor.allScreenBackgroundBoxColor,
                     ),
-                  ),
-                  borderRadius: BorderRadius.circular(ScreenHeight.fSize_15())),
-              child: Padding(
-                padding: EdgeInsets.all(ScreenHeight.fSize_15()),
-                child: SingleChildScrollView(
-                  physics: const BouncingScrollPhysics(),
-                  child: HtmlWidget(
-                    paySendAndReceiveController.SendData,
-                    textStyle:
-                    GoogleFonts.lexend(color: allColor.homeScreenPayPalColor),
+                    border: GradientBoxBorder(
+                      gradient: LinearGradient(
+                        begin: Alignment.topCenter,
+                        end: Alignment.bottomCenter,
+                        colors: allColor.homeScreenContainerBorderColor,
+                      ),
+                    ),
+                    borderRadius: BorderRadius.circular(ScreenHeight.fSize_15())),
+                child: Padding(
+                  padding: EdgeInsets.all(ScreenHeight.fSize_15()),
+                  child: SingleChildScrollView(
+                    physics: const BouncingScrollPhysics(),
+                    child: HtmlWidget(
+                      paySendAndReceiveController.SendData,
+                      textStyle:
+                      GoogleFonts.lexend(color: allColor.homeScreenPayPalColor),
+                    ),
                   ),
                 ),
               ),
             ),
-          ),
-          payPalBannerController.BANNER("/SendScreen")
-        ],
+            payPalBannerController.BANNER("/SendScreen")
+          ],
+        ),
       ),
     );
   }
